@@ -1,6 +1,21 @@
 module Her
   module Model
     module Paths
+      # Return a path based on the collection path and a resource data
+      #
+      # @example
+      #   class User
+      #     include Her::Model
+      #     collection_path "/utilisateurs"
+      #   end
+      #
+      #   User.find(1) # Fetched via GET /utilisateurs/1
+      def request_path # {{{
+        self.class.build_request_path(@data)
+      end # }}}
+    end
+
+    module PathsClassMethods
       # Defines a custom collection path for the resource
       #
       # @example
@@ -44,19 +59,6 @@ module Her
           # Look for :key or :_key, otherwise raise an exception
           parameters[$1.to_sym] || parameters["_#{$1}".to_sym] || raise(Her::Errors::PathError.new("Missing :_#{$1} parameter to build the request path (#{path})."))
         end
-      end # }}}
-
-      # Return a path based on the collection path and a resource data
-      #
-      # @example
-      #   class User
-      #     include Her::Model
-      #     collection_path "/utilisateurs"
-      #   end
-      #
-      #   User.find(1) # Fetched via GET /utilisateurs/1
-      def request_path # {{{
-        self.class.build_request_path(@data)
       end # }}}
     end
   end

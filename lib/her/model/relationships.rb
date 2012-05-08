@@ -17,7 +17,7 @@ module Her
             if data.include?(name_key)
               klass = self.nearby_class(relationship[:class_name])
               if type == :has_many
-                data[name_key] = Her::Model::ORM.initialize_collection(klass, data[name_key])
+                data[name_key] = data[name_key].map{ |data| klass.new(data) }
               else
                 data[name_key] = klass.new(data[name_key])
               end
