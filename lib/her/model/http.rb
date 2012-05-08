@@ -160,7 +160,6 @@ module Her
       end
 
       def custom_get(*paths)
-        metaclass = (class << self; self; end)
         paths.each do |path|
           metaclass.send(:define_method, path.to_sym) do |*attrs|
             get(path, attrs.first || Hash.new)
@@ -169,7 +168,6 @@ module Her
       end
 
       def custom_post(*paths)
-        metaclass = (class << self; self; end)
         paths.each do |path|
           metaclass.send(:define_method, path.to_sym) do |*attrs|
             post(path, attrs.first || Hash.new)
@@ -178,7 +176,6 @@ module Her
       end
 
       def custom_put(*paths)
-        metaclass = (class << self; self; end)
         paths.each do |path|
           metaclass.send(:define_method, path.to_sym) do |*attrs|
             put(path, attrs.first || Hash.new)
@@ -187,7 +184,6 @@ module Her
       end
 
       def custom_patch(*paths)
-        metaclass = (class << self; self; end)
         paths.each do |path|
           metaclass.send(:define_method, path.to_sym) do |*attrs|
             patch(path, attrs.first || Hash.new)
@@ -196,12 +192,17 @@ module Her
       end
 
       def custom_delete(*paths)
-        metaclass = (class << self; self; end)
         paths.each do |path|
           metaclass.send(:define_method, path.to_sym) do |*attrs|
             delete(path, attrs.first || Hash.new)
           end
         end
+      end
+
+      protected
+
+      def metaclass
+        @her_metaclass ||= (class << self; self; end)
       end
     end
   end
