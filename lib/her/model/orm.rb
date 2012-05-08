@@ -118,7 +118,19 @@ module Her
       def save # {{{
         params = @data.dup
         resource = self
-        if @data[:id]
+        if new?
+          self.class.class_eval do
+            perform_hook(resource, :before, :create)
+            perform_hook(resource, :before, :save)
+          end
+          self.class.request(params.merge(:_method => :post, :_path => "#{request_path}")) do |parsed_data|
+            @data = parsed_data[:data]
+          end
+          self.class.class_eval do
+            perform_hook(resource, :after, :save)
+            perform_hook(resource, :after, :create)
+          end
+        else
           self.class.class_eval do
             perform_hook(resource, :before, :update)
             perform_hook(resource, :before, :save)
@@ -131,18 +143,6 @@ module Her
             perform_hook(resource, :after, :update)
           end
           self
-        else
-          self.class.class_eval do
-            perform_hook(resource, :before, :create)
-            perform_hook(resource, :before, :save)
-          end
-          self.class.request(params.merge(:_method => :post, :_path => "#{request_path}")) do |parsed_data|
-            @data = parsed_data[:data]
-          end
-          self.class.class_eval do
-            perform_hook(resource, :after, :save)
-            perform_hook(resource, :after, :create)
-          end
         end
         self
       end # }}}
