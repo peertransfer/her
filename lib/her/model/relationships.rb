@@ -18,9 +18,7 @@ module Her
               klass = self.nearby_class(relationship[:class_name])
               if type == :has_many
                 data[relationship[:name]] = Her::Model::ORM.initialize_collection(klass, data[relationship[:name]])
-              elsif type == :has_one
-                data[relationship[:name]] = klass.new(data[relationship[:name]])
-              elsif type == :belongs_to
+              else
                 data[relationship[:name]] = klass.new(data[relationship[:name]])
               end
             end
