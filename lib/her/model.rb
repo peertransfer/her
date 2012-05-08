@@ -10,7 +10,6 @@ module Her
   #   @user = User.new(:name => "Rémi")
   #   @user.save
   module Model
-    autoload :Base,          "her/model/base"
     autoload :HTTP,          "her/model/http"
     autoload :ORM,           "her/model/orm"
     autoload :Relationships, "her/model/relationships"
@@ -27,7 +26,6 @@ module Her
 
     # Class methods
     included do
-      extend Her::Model::Base
       extend Her::Model::HTTP
       extend Her::Model::ORM
       extend Her::Model::Relationships
