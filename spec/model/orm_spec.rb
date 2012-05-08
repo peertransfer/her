@@ -43,6 +43,7 @@ describe Her::Model::ORM do
     it "handles new resource" do # {{{
       @new_user = Foo::User.new(:fullname => "Tobias Fünke")
       @new_user.new?.should be_true
+      @new_user.id.should be_nil
 
       @existing_user = Foo::User.find(1)
       @existing_user.new?.should be_false

@@ -34,7 +34,7 @@ module Her
       # Override the method to prevent from returning the object ID (in ruby-1.8.7)
       # @private
       def id # {{{
-        @data[:id] || super
+        @data[:id]
       end # }}}
 
       # Initialize a collection of resources with raw data from an HTTP request
@@ -46,7 +46,7 @@ module Her
 
       # Return `true` if a resource was not saved yet
       def new? # {{{
-        !@data.include?(:id)
+        !self.id
       end # }}}
 
       # Fetch a specific resource based on an ID
