@@ -76,7 +76,7 @@ module Her
 
     private
     # @private
-    def self.default_api(attrs={}) # {{{
+    def self.default_api # {{{
       defined?(@@default_api) ? @@default_api : nil
     end # }}}
   end
