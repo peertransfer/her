@@ -26,5 +26,3 @@ Here is a list of backward-incompatible changes that were introduced while Her i
    Now it expects this (the `errors` key is not treated as resource data):
    
         { "id": 1, "name": "Foo", "errors": [] }
-      
-   If you still want to get the old behavior, you can use `Her::Middleware::SecondLevelParseJSON` instead of `Her::Middleware::FirstLevelParseJSON` in your middleware stack.
