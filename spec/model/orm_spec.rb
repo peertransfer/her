@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), "../spec_helper.rb")
 
 describe Her::Model::ORM do
   context "mapping data to Ruby objects" do
-    before do # {{{
+    before do
       api = Her::API.new
       api.setup :base_uri => "https://api.example.com" do |builder|
         builder.use Her::Middleware::FirstLevelParseJSON
@@ -16,21 +16,21 @@ describe Her::Model::ORM do
       FakeWeb.register_uri(:get, "https://api.example.com/admin_users", :body => [{ :id => 1, :name => "Tobias Fünke" }, { :id => 2, :name => "Lindsay Fünke" }].to_json)
 
       spawn_model "Foo::User" do
-        uses_api api
+        set_api api
       end
 
       spawn_model "Foo::AdminUser" do
-        uses_api api
+        set_api api
       end
-    end # }}}
+    end
 
-    it "maps a single resource to a Ruby object" do # {{{
+    it "maps a single resource to a Ruby object" do
       @user = Foo::User.find(1)
       @user.id.should == 1
       @user.name.should == "Tobias Fünke"
-    end # }}}
+    end
 
-    it "maps a collection of resources to an array of Ruby objects" do # {{{
+    it "maps a collection of resources to an array of Ruby objects" do
       @users = Foo::User.all
       @users.length.should == 2
       @users.first.name.should == "Tobias Fünke"
@@ -38,20 +38,20 @@ describe Her::Model::ORM do
       @users = Foo::AdminUser.all
       @users.length.should == 2
       @users.first.name.should == "Tobias Fünke"
-    end # }}}
+    end
 
-    it "handles new resource" do # {{{
+    it "handles new resource" do
       @new_user = Foo::User.new(:fullname => "Tobias Fünke")
       @new_user.new?.should be_true
       @new_user.id.should be_nil
 
       @existing_user = Foo::User.find(1)
       @existing_user.new?.should be_false
-    end # }}}
+    end
   end
 
   context "creating resources" do
-    before do # {{{
+    before do
       Her::API.setup :base_uri => "https://api.example.com" do |builder|
         builder.use Her::Middleware::FirstLevelParseJSON
         builder.use Faraday::Request::UrlEncoded
@@ -61,23 +61,23 @@ describe Her::Model::ORM do
       FakeWeb.register_uri(:post, "https://api.example.com/users", :body => { :id => 1, :fullname => "Tobias Fünke" }.to_json)
 
       spawn_model "Foo::User"
-    end # }}}
+    end
 
-    it "handle one-line resource creation" do # {{{
+    it "handle one-line resource creation" do
       @user = Foo::User.create(:fullname => "Tobias Fünke")
       @user.id.should == 1
       @user.fullname.should == "Tobias Fünke"
-    end # }}}
+    end
 
-    it "handle resource creation through Model.new + #save" do # {{{
+    it "handle resource creation through Model.new + #save" do
       @user = Foo::User.new(:fullname => "Tobias Fünke")
       @user.save
       @user.fullname.should == "Tobias Fünke"
-    end # }}}
+    end
   end
 
   context "updating resources" do
-    before do # {{{
+    before do
       @api = Her::API.new
       @api.setup :base_uri => "https://api.example.com" do |builder|
         builder.use Her::Middleware::FirstLevelParseJSON
@@ -89,30 +89,30 @@ describe Her::Model::ORM do
       FakeWeb.register_uri(:put, "https://api.example.com/users/1", :body => { :id => 1, :fullname => "Lindsay Fünke" }.to_json)
 
       spawn_model "Foo::User"
-    end # }}}
+    end
 
-    it "handle resource data update without saving it" do # {{{
+    it "handle resource data update without saving it" do
       @user = Foo::User.find(1)
       @user.fullname.should == "Tobias Fünke"
       @user.fullname = "Kittie Sanchez"
       @user.fullname.should == "Kittie Sanchez"
-    end # }}}
+    end
 
-    it "handle resource update through the .update class method" do # {{{
-      @user = Foo::User.save_existing(1, { :fullname => "Lindsay Fünke" })
+    it "handle resource update through the .update class method" do
+      @user = Foo::User.update(1, { :fullname => "Lindsay Fünke" })
       @user.fullname.should == "Lindsay Fünke"
-    end # }}}
+    end
 
-    it "handle resource update through #save on an existing resource" do # {{{
+    it "handle resource update through #save on an existing resource" do
       @user = Foo::User.find(1)
       @user.fullname = "Lindsay Fünke"
       @user.save
       @user.fullname.should == "Lindsay Fünke"
-    end # }}}
+    end
   end
 
   context "deleting resources" do
-    before do # {{{
+    before do
       @api = Her::API.new
       @api.setup :base_uri => "https://api.example.com" do |builder|
         builder.use Her::Middleware::FirstLevelParseJSON
@@ -124,17 +124,17 @@ describe Her::Model::ORM do
       FakeWeb.register_uri(:delete, "https://api.example.com/users/1", :body => { :id => 1, :fullname => "Lindsay Fünke", :active => false }.to_json)
 
       spawn_model "Foo::User"
-    end # }}}
+    end
 
-    it "handle resource deletion through the .destroy class method" do # {{{
-      @user = Foo::User.destroy_existing(1)
+    it "handle resource deletion through the .destroy class method" do
+      @user = Foo::User.destroy(1)
       @user.active.should be_false
-    end # }}}
+    end
 
-    it "handle resource deletion through #destroy on an existing resource" do # {{{
+    it "handle resource deletion through #destroy on an existing resource" do
       @user = Foo::User.find(1)
       @user.destroy
       @user.active.should be_false
-    end # }}}
+    end
   end
 end

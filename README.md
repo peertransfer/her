@@ -459,12 +459,12 @@ You can then define which API a model will use:
 ```ruby
 class User
   include Her::Model
-  uses_api $my_api
+  set_api $my_api
 end
 
 class Category
   include Her::Model
-  uses_api $other_api
+  set_api $other_api
 end
 
 User.all
