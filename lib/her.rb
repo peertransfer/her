@@ -1,7 +1,7 @@
 require "her/version"
 require "multi_json"
 require "faraday"
-require "active_support"
+require 'active_support/concern'
 require "active_support/inflector"
 
 module Her
