@@ -25,7 +25,7 @@ module Her
         end
         path.gsub(/:([\w_]+)/) do
           # Look for :key or :_key, otherwise raise an exception
-          parameters[$1.to_sym] || parameters["_#{$1}".to_sym] || raise(Her::Errors::PathError.new("Missing :_#{$1} parameter to build the request path (#{path})."))
+          parameters[$1.to_sym] || parameters["_#{$1}".to_sym]
         end
       end
     end

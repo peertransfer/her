@@ -31,11 +31,6 @@ describe Her::Model::Paths do
           Foo::User.build_request_path(:id => "foo").should == "/utilisateurs/foo"
           Foo::User.build_request_path.should == "/users"
         end
-
-        it "raises exceptions when building a path without required custom variables" do
-          Foo::User.collection_path "/organizations/:organization_id/utilisateurs"
-          expect { Foo::User.build_request_path(:id => "foo") }.should raise_error(Her::Errors::PathError)
-        end
       end
     end
 
@@ -66,11 +61,6 @@ describe Her::Model::Paths do
           Foo::AdminUser.resource_path "/users/:id"
           Foo::AdminUser.build_request_path(:id => "foo").should == "/users/foo"
           Foo::AdminUser.build_request_path.should == "/admin_users"
-        end
-
-        it "raises exceptions when building a path without required custom variables" do
-          Foo::AdminUser.collection_path "/organizations/:organization_id/users"
-          expect { Foo::AdminUser.build_request_path(:id => "foo") }.should raise_error(Her::Errors::PathError)
         end
       end
     end
