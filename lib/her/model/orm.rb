@@ -17,7 +17,7 @@ module Her
       # Initialize a collection of resources
       # @private
       def self.initialize_collection(name, collection_data) # {{{
-        collection_data.map { |item_data| Object.const_get(name.to_s.classify).new(item_data) }
+        collection_data.map { |item_data| (name.to_s.classify.constantize).new(item_data) }
       end # }}}
 
       # Handles missing methods by routing them through @data
